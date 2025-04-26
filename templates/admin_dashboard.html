@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+
+{% block title %}Administração - ECG IA Primário{% endblock %}
+
+{% block content %}
+<section class="admin-dashboard fade-in">
+  <div class="dashboard-header">
+    <h1>Área Administrativa</h1>
+    <p>Gerencie usuários, pacientes, uploads, estatísticas e atividades.</p>
+  </div>
+
+  <!-- Estatísticas e Gráficos -->
+  <div class="admin-stats">
+    <div class="stat-card">
+      <h3>Total de Usuários</h3>
+      <p>{{ users|length }}</p>
+    </div>
+    <div class="stat-card">
+      <h3>Usuários Novos por Mês</h3>
+      <canvas id="userGrowthChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Pesquisa de Usuários -->
+  <div class="admin-search">
+    <input type="text" id="userSearch" placeholder="Buscar usuário por nome ou email..." />
+  </div>
+
+  <!-- Tabela de Usuários -->
+  <div class="admin-table-container">
+    <h2>Usuários Cadastrados</h2>
+    <div class="table-wrapper">
+      <table class="admin-table" id="usersTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>E-mail</th>
+            <th>Admin?</th>
+            <th>Último Login</th>
+            <th>IP</th>
+            <th>Cadastro</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in users %}
+          <tr>
+            <td>{{ user.id }}</td>
+            <td class="user-name">{{ user.username }}</td>
+            <td class="user-email">{{ user.email }}</td>
+            <td>{% if user.is_admin %}✅{% else %}❌{% endif %}</td>
+            <td>{{ user.last_login.strftime('%d/%m/%Y %H:%M') if user.last_login else '-' }}</td>
+            <td>{{ user.last_ip or '-' }}</td>
+            <td>{{ user.created_at.strftime('%d/%m/%Y') }}</td>
+            <td class="user-status">{% if user.is_banned %}<span class="banned">Banido</span>{% else %}<span class="active">Ativo</span>{% endif %}</td>
+            <td>
+              <button class="btn-small btn-edit" onclick="openEditModal({{ user.id }}, '{{ user.username }}', '{{ user.email }}')">✏️</button>
+              {% if not user.is_admin %}
+                <button class="btn-small btn-promote" onclick="confirmAction('/promote-user/{{ user.id }}', 'Promover administrador', 'Promover {{ user.username }}?')">⭐</button>
+              {% else %}
+                {% if user.id != current_user.id %}
+                  <button class="btn-small btn-demote" onclick="confirmAction('/demote-user/{{ user.id }}', 'Remover administrador', 'Remover privilégios de {{ user.username }}?')">🚫</button>
+                {% endif %}
+              {% endif %}
+              {% if user.is_banned %}
+                <button class="btn-small btn-unban" onclick="confirmAction('/unban-user/{{ user.id }}', 'Desbanir usuário', 'Desbanir {{ user.username }}?')">🔓</button>
+              {% else %}
+                <button class="btn-small btn-ban" onclick="confirmAction('/ban-user/{{ user.id }}', 'Banir usuário', 'Banir {{ user.username }} temporariamente?')">🔒</button>
+              {% endif %}
+              <button class="btn-small btn-reset" onclick="confirmAction('/reset-password/{{ user.id }}', 'Redefinir senha', 'Enviar nova senha para {{ user.username }}?')">🔑</button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- Modal de Confirmação -->
+<div id="confirmModal" class="modal">
+  <div class="modal-content">
+    <h2 id="confirmTitle">Confirmar Ação</h2>
+    <p id="confirmMessage"></p>
+    <div class="modal-actions">
+      <form id="confirmForm" method="POST">
+        <button type="submit" class="btn-primary">Confirmar</button>
+      </form>
+      <button type="button" onclick="closeModal()" class="btn-secondary">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Edição -->
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <h2>Editar Usuário</h2>
+    <form id="editForm" method="POST">
+      <input type="text" name="username" id="editUsername" placeholder="Nome" required>
+      <input type="email" name="email" id="editEmail" placeholder="Email" required>
+      <button type="submit" class="btn-primary">Salvar</button>
+      <button type="button" onclick="closeEditModal()" class="btn-secondary">Cancelar</button>
+    </form>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  // Geração de gráfico de crescimento de usuários
+  const ctx = document.getElementById('userGrowthChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: {{ user_growth.labels|tojson }},
+      datasets: [{
+        label: 'Novos Usuários',
+        data: {{ user_growth.data|tojson }},
+        fill: false,
+        tension: 0.3
+      }]
+    }
+  });
+
+  // Pesquisa de usuários
+  document.getElementById('userSearch').addEventListener('input', function(){
+    const term = this.value.toLowerCase();
+    document.querySelectorAll('#usersTable tbody tr').forEach(row=>{
+      const name = row.querySelector('.user-name').textContent.toLowerCase();
+      const email = row.querySelector('.user-email').textContent.toLowerCase();
+      row.style.display = (name.includes(term)||email.includes(term)) ? '' : 'none';
+    });
+  });
+
+  // Funções de modal de confirmação
+  function confirmAction(url, title, message){
+    document.getElementById('confirmForm').action = url;
+    document.getElementById('confirmTitle').textContent = title;
+    document.getElementById('confirmMessage').textContent = message;
+    document.getElementById('confirmModal').style.display = 'block';
+  }
+  function closeModal(){
+    document.getElementById('confirmModal').style.display = 'none';
+  }
+  window.onclick = function(e){
+    if(e.target == document.getElementById('confirmModal')) closeModal();
+  };
+
+  // Modal de edição
+  function openEditModal(id, name, email){
+    document.getElementById('editForm').action = '/edit-user/' + id;
+    document.getElementById('editUsername').value = name;
+    document.getElementById('editEmail').value = email;
+    document.getElementById('editModal').style.display = 'block';
+  }
+  function closeEditModal(){
+    document.getElementById('editModal').style.display = 'none';
+  }
+  window.onclick = function(e){
+    if(e.target == document.getElementById('editModal')) closeEditModal();
+  };
+</script>
+{% endblock %}

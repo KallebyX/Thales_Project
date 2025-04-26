@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Importar Pacientes{% endblock %}
+
+{% block content %}
+<section class="auth-container">
+  <h2>📥 Importar Pacientes</h2>
+  <p class="intro-text">Envie uma planilha no formato <strong>.xlsx</strong> com os dados dos pacientes.</p>
+  
+  <form method="POST" enctype="multipart/form-data" class="modal-form">
+    <input type="file" name="file" accept=".xlsx" required>
+    <button type="submit" class="btn-register">Enviar Planilha</button>
+  </form>
+
+  <div class="upload-instructions">
+    <p><strong>Formato esperado:</strong></p>
+    <ul>
+      <li><strong>Nome</strong> (obrigatório)</li>
+      <li><strong>Data de Nascimento</strong> (opcional)</li>
+      <li><strong>CPF</strong> (opcional)</li>
+      <li><strong>E-mail</strong> (opcional)</li>
+      <li><strong>Telefone</strong> (opcional)</li>
+    </ul>
+    <p class="privacy-text">Seus dados são protegidos conforme a LGPD.</p>
+  </div>
+</section>
+{% endblock %}

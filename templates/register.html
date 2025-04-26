@@ -4,21 +4,21 @@
 
 {% block content %}
 <section class="register-container">
-  <h2>Criar Conta</h2>
+  <h2>Crie sua Conta</h2>
   <form action="{{ url_for('main.register') }}" method="POST" class="register-form">
-    <input type="text" name="name" placeholder="Nome completo" required>
-    <input type="email" name="email" placeholder="E-mail" required>
-    <input type="password" name="password" placeholder="Senha" required>
-    <input type="password" name="confirm_password" placeholder="Confirme sua senha" required>
+    <input type="text" id="username" name="username" placeholder="Seu nome completo" required>
+    <input type="email" id="email" name="email" placeholder="Seu e-mail" required>
+    <input type="password" id="password" name="password" placeholder="Crie uma senha" required>
+    <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirme sua senha" required>
     
     <div class="checkbox-container">
       <input type="checkbox" id="terms" required>
-      <label for="terms">Li e aceito os <a href="#">Termos de Uso</a> e a <a href="#">Política de Privacidade</a>.</label>
+      <label for="terms">Li e aceito os <a href="{{ url_for('main.termos_de_uso') }}">Termos de Uso</a> e a <a href="{{ url_for('main.sobre_nos') }}">Política de Privacidade</a>.</label>
     </div>
     
-    <button type="submit" class="btn-register">Criar Conta</button>
+    <button type="submit" class="btn-register">Cadastrar</button>
 
-    <p class="login-link">Já possui uma conta? <a href="{{ url_for('main.login') }}">Entrar</a></p>
+    <p class="login-link">Já tem uma conta? <a href="{{ url_for('main.login') }}">Entrar</a></p>
     <p class="privacy-text">Seus dados estão protegidos conforme a LGPD.</p>
   </form>
 </section>

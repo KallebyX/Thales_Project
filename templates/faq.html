@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}Ajuda e FAQ - ECG IA Primário{% endblock %}
+
+{% block content %}
+<section class="faq-section">
+  <h1>Ajuda e Perguntas Frequentes (FAQ)</h1>
+
+  <div class="faq-item">
+    <button class="accordion">❓ Como faço para enviar um ECG para análise? <span class="accordion-icon">+</span></button>
+    <div class="panel">
+      <p>Após fazer login, acesse seu painel e clique em "Enviar ECG". Você poderá fazer upload de uma imagem do traçado.</p>
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <button class="accordion">❓ A ferramenta fornece diagnóstico médico? <span class="accordion-icon">+</span></button>
+    <div class="panel">
+      <p>Não. A análise é apenas um apoio à interpretação clínica. O diagnóstico definitivo deve ser feito por um profissional de saúde.</p>
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <button class="accordion">❓ Preciso de internet para usar a ferramenta? <span class="accordion-icon">+</span></button>
+    <div class="panel">
+      <p>Não necessariamente. Nosso sistema foi criado para funcionar também offline, ideal para UBSs e regiões remotas.</p>
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <button class="accordion">❓ Quem pode utilizar a plataforma? <span class="accordion-icon">+</span></button>
+    <div class="panel">
+      <p>Profissionais de saúde habilitados (médicos, enfermeiros, agentes de saúde) e pesquisadores autorizados.</p>
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <button class="accordion">❓ Como entro em contato com o suporte? <span class="accordion-icon">+</span></button>
+    <div class="panel">
+      <p>Você pode utilizar o botão de WhatsApp flutuante ou enviar um e-mail para <a href="mailto:contato@ecgia.com">contato@ecgia.com</a>.</p>
+    </div>
+  </div>
+</section>
+
+<script>
+  const accordions = document.querySelectorAll(".accordion");
+
+  accordions.forEach(acc => {
+    acc.addEventListener("click", function() {
+      // Fechar todos
+      accordions.forEach(other => {
+        if (other !== this) {
+          other.classList.remove("active");
+          other.querySelector(".accordion-icon").textContent = "+";
+          const otherPanel = other.nextElementSibling;
+          otherPanel.style.maxHeight = null;
+        }
+      });
+
+      // Alternar este
+      this.classList.toggle("active");
+      const panel = this.nextElementSibling;
+      const icon = this.querySelector(".accordion-icon");
+
+      if (panel.style.maxHeight) {
+        panel.style.maxHeight = null;
+        icon.textContent = "+";
+      } else {
+        panel.style.maxHeight = panel.scrollHeight + "px";
+        icon.textContent = "-";
+      }
+    });
+  });
+</script>
+{% endblock %}

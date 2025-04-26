@@ -3,25 +3,27 @@
 {% block title %}Início{% endblock %}
 
 {% block content %}
-<header class="hero">
+<header class="hero fade-in">
   <div class="hero-content">
     <h1>Diagnóstico Cardiológico Inteligente, Seguro e Para Todos</h1>
     <p>Transformando a saúde no Brasil — do grande centro ao interior mais distante.</p>
-    <a href="{{ url_for('main.register') }}" class="btn-primary">Cadastrar-se</a>
-    <a href="{{ url_for('main.login') }}" class="btn-secondary">Entrar</a>
+    <div class="hero-buttons">
+      <a href="{{ url_for('main.register') }}" class="btn-primary">Cadastrar-se</a>
+      <a href="{{ url_for('main.login') }}" class="btn-secondary">Entrar</a>
+    </div>
   </div>
 </header>
 
-<section class="features">
+<section class="features fade-in">
   <h2>Por que escolher o ECG IA Primário?</h2>
   <div class="feature-grid">
     <div class="feature-item">
-      <img src="{{ url_for('static', filename='img/offline.svg') }}" alt="Offline" class="feature-icon">
+      <img src="{{ url_for('static', filename='img/offline.svg') }}" alt="Funciona Offline" class="feature-icon">
       <h3>Funciona Offline</h3>
       <p>Ideal para locais com internet limitada. Diagnóstico rápido em qualquer lugar.</p>
     </div>
     <div class="feature-item">
-      <img src="{{ url_for('static', filename='img/health_center.svg') }}" alt="UBS" class="feature-icon">
+      <img src="{{ url_for('static', filename='img/health_center.svg') }}" alt="Para Todos" class="feature-icon">
       <h3>Para Todos</h3>
       <p>Da Unidade Básica do interior ao hospital de alta complexidade.</p>
     </div>
@@ -31,40 +33,41 @@
       <p>Proteção total de dados, respeitando normas brasileiras de saúde.</p>
     </div>
     <div class="feature-item">
-      <img src="{{ url_for('static', filename='img/support.svg') }}" alt="Suporte" class="feature-icon">
+      <img src="{{ url_for('static', filename='img/support.svg') }}" alt="Suporte Real" class="feature-icon">
       <h3>Suporte Real ao Profissional</h3>
       <p>Auxiliamos médicos, enfermeiros e agentes de saúde em sua missão de salvar vidas.</p>
     </div>
   </div>
 </section>
 
-<section class="how-it-works">
-    <h2>Como Funciona?</h2>
-    <div class="steps-container">
-      <div class="step-card">
-        <div class="step-number">1</div>
-        <h3>Login</h3>
-        <p>Acesse a plataforma com seu cadastro seguro.</p>
-      </div>
-      <div class="step-card">
-        <div class="step-number">2</div>
-        <h3>Envio</h3>
-        <p>Carregue a imagem do seu ECG de forma rápida e segura.</p>
-      </div>
-      <div class="step-card">
-        <div class="step-number">3</div>
-        <h3>Análise</h3>
-        <p>Receba a avaliação assistida e tome decisões clínicas embasadas.</p>
-      </div>
+<section class="how-it-works fade-in">
+  <h2>Como Funciona?</h2>
+  <div class="steps-container">
+    <div class="step-card">
+      <div class="step-number">1</div>
+      <h3>Login</h3>
+      <p>Acesse a plataforma com seu cadastro seguro.</p>
     </div>
-  </section>
-  <section id="sobre-nos" class="sobre-nos">
+    <div class="step-card">
+      <div class="step-number">2</div>
+      <h3>Envio</h3>
+      <p>Carregue a imagem do seu ECG de forma rápida e segura.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-number">3</div>
+      <h3>Análise</h3>
+      <p>Receba a avaliação assistida e tome decisões clínicas embasadas.</p>
+    </div>
+  </div>
+</section>
+
+<section id="sobre-nos" class="sobre-nos fade-in">
+  <div class="sobre-nos-container">
     <h2>Sobre Nós</h2>
-    <p>Somos um projeto 100% brasileiro dedicado a democratizar o acesso à triagem cardiológica inteligente. 
-       Nossa missão é oferecer suporte tecnológico para profissionais de saúde em todos os cantos do Brasil, promovendo equidade, inovação e vidas salvas.
-    </p>
-  </section>
-<footer class="footer">
-  <p>© 2025 ECG IA Primário — Tecnologia feita no Brasil para salvar vidas em todo lugar.</p>
-</footer>
+    <p>Somos um projeto 100% brasileiro dedicado a democratizar o acesso à triagem cardiológica inteligente.
+       Nossa missão é oferecer suporte tecnológico para profissionais de saúde em todos os cantos do Brasil,
+       promovendo equidade, inovação e vidas salvas.</p>
+  </div>
+</section>
+
 {% endblock %}

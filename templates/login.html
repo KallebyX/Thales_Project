@@ -4,15 +4,15 @@
 
 {% block content %}
 <section class="login-container">
-  <h2>Entrar na Plataforma</h2>
+  <h2>Bem-vindo de volta!</h2>
   <form action="{{ url_for('main.login') }}" method="POST" class="login-form">
     <input type="email" name="email" placeholder="E-mail" required>
     <input type="password" name="password" placeholder="Senha" required>
     
     <button type="submit" class="btn-login">Entrar</button>
 
-    <p class="register-link">Ainda não possui uma conta? <a href="{{ url_for('main.register') }}">Cadastre-se</a></p>
-    <p class="privacy-text">Seu acesso é seguro e protegido pela LGPD.</p>
+    <p class="register-link">Novo por aqui? <a href="{{ url_for('main.register') }}">Criar Conta</a></p>
+    <p class="privacy-text">Protegemos seus dados conforme a LGPD.</p>
   </form>
 </section>
 {% endblock %}

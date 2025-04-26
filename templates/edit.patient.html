@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% block title %}Editar Paciente{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <h1 class="h4 mb-4">Editar Paciente</h1>
+  <form method="POST" action="{{ url_for('main.edit_patient', patient_id=patient.id) }}">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label">Nome completo<span class="text-danger">*</span></label>
+        <input type="text" name="name" value="{{ patient.name }}" class="form-control" required>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Data de nascimento</label>
+        <input type="date" name="birth_date" value="{{ patient.birth_date|default('') }}" class="form-control">
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Gênero</label>
+        <select name="gender" class="form-select">
+          <option value="">Selecione</option>
+          {% for g in ['Masculino','Feminino','Outro'] %}
+            <option value="{{ g }}" {% if patient.gender==g %}selected{% endif %}>{{ g }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Raça/Cor</label>
+        <select name="race" class="form-select">
+          <option value="">Selecione</option>
+          {% for r in ['Branca','Negra','Parda','Amarela','Indígena'] %}
+            <option value="{{ r }}" {% if patient.race==r %}selected{% endif %}>{{ r }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">CPF / Documento</label>
+        <input type="text" name="cpf" value="{{ patient.cpf }}" class="form-control">
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">E-mail</label>
+        <input type="email" name="email" value="{{ patient.email }}" class="form-control">
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Telefone</label>
+        <input type="text" name="phone" value="{{ patient.phone }}" class="form-control">
+      </div>
+      <div class="col-12">
+        <label class="form-label">Endereço completo</label>
+        <input type="text" name="address" value="{{ patient.address }}" class="form-control">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Nível socioeconômico</label>
+        <select name="socioeconomic" class="form-select">
+          <option value="">Selecione</option>
+          {% for s in ['Baixo','Médio','Alto'] %}
+            <option value="{{ s }}" {% if patient.socioeconomic==s %}selected{% endif %}>{{ s }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <!-- Histórico e hábitos -->
+      <div class="col-md-6">
+        <label class="form-label">Histórico pessoal</label>
+        <textarea name="history_personal" class="form-control">{{ patient.history_personal }}</textarea>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Histórico familiar</label>
+        <textarea name="history_family" class="form-control">{{ patient.history_family }}</textarea>
+      </div>
+      <div class="col-md-2 form-check">
+        <input type="checkbox" name="hypertension" id="hypertension" class="form-check-input" {% if patient.hypertension %}checked{% endif %}>
+        <label class="form-check-label" for="hypertension">Hipertensão</label>
+      </div>
+      <div class="col-md-2 form-check">
+        <input type="checkbox" name="diabetes" id="diabetes" class="form-check-input" {% if patient.diabetes %}checked{% endif %}>
+        <label class="form-check-label" for="diabetes">Diabetes</label>
+      </div>
+      <div class="col-md-2 form-check">
+        <input type="checkbox" name="dyslipidemia" id="dyslipidemia" class="form-check-input" {% if patient.dyslipidemia %}checked{% endif %}>
+        <label class="form-check-label" for="dyslipidemia">Dislipidemia</label>
+      </div>
+      <div class="col-md-2 form-check">
+        <input type="checkbox" name="obesity" id="obesity" class="form-check-input" {% if patient.obesity %}checked{% endif %}>
+        <label class="form-check-label" for="obesity">Obesidade</label>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Tabagismo</label>
+        <input type="text" name="smoking" value="{{ patient.smoking }}" class="form-control" placeholder="Sim/Não e tempo">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Consumo de álcool</label>
+        <input type="text" name="alcohol" value="{{ patient.alcohol }}" class="form-control">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Exercício físico</label>
+        <input type="text" name="exercise" value="{{ patient.exercise }}" class="form-control">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Sono</label>
+        <input type="text" name="sleep" value="{{ patient.sleep }}" class="form-control" placeholder="Horas e qualidade">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Dieta habitual</label>
+        <select name="diet" class="form-select">
+          <option value="">Selecione</option>
+          {% for d in ['Saudável','Regular','Ruim'] %}
+            <option value="{{ d }}" {% if patient.diet==d %}selected{% endif %}>{{ d }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-12">
+        <label class="form-label">Observações adicionais</label>
+        <textarea name="observations" class="form-control">{{ patient.observations }}</textarea>
+      </div>
+    </div>
+    <div class="mt-4">
+      <button type="submit" class="btn btn-primary">Salvar</button>
+      <a href="{{ url_for('main.dashboard') }}" class="btn btn-secondary">Cancelar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}`
