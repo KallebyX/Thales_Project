@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Cadastrar-se{% endblock %}
+
+{% block content %}
+<section class="register-container">
+  <h2>Criar Conta</h2>
+  <form action="{{ url_for('main.register') }}" method="POST" class="register-form">
+    <input type="text" name="name" placeholder="Nome completo" required>
+    <input type="email" name="email" placeholder="E-mail" required>
+    <input type="password" name="password" placeholder="Senha" required>
+    <input type="password" name="confirm_password" placeholder="Confirme sua senha" required>
+    
+    <div class="checkbox-container">
+      <input type="checkbox" id="terms" required>
+      <label for="terms">Li e aceito os <a href="#">Termos de Uso</a> e a <a href="#">Política de Privacidade</a>.</label>
+    </div>
+    
+    <button type="submit" class="btn-register">Criar Conta</button>
+
+    <p class="login-link">Já possui uma conta? <a href="{{ url_for('main.login') }}">Entrar</a></p>
+    <p class="privacy-text">Seus dados estão protegidos conforme a LGPD.</p>
+  </form>
+</section>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container text-center">
+    <h2>Olá, {{ user.username }}!</h2>
+    <p>Envie uma imagem do seu Eletrocardiograma (ECG) para análise.</p>
+
+    <form action="{{ url_for('main.dashboard') }}" method="POST" enctype="multipart/form-data" class="mt-4">
+        <div class="mb-3">
+            <input class="form-control" type="file" name="file" required>
+        </div>
+        <button type="submit" class="btn btn-success">Enviar ECG</button>
+    </form>
+</div>
+{% endblock %}

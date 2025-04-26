@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Painel Admin{% endblock %}
+
+{% block content %}
+<h2 class="text-center">Usuários Registrados</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Administrador?</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.username }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ 'Sim' if user.is_admin else 'Não' }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

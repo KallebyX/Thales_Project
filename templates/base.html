@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}ECG IA Primário{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+  <!-- MENU DE NAVEGAÇÃO -->
+  <nav class="navbar">
+    <div class="navbar-container">
+      <div class="navbar-logo">
+        <a href="{{ url_for('main.home') }}">ECG IA Primário</a>
+      </div>
+      <ul class="navbar-links">
+        <li><a href="{{ url_for('main.home') }}">Início</a></li>
+        <li><a href="#sobre-nos">Sobre Nós</a></li>
+        <li><a href="{{ url_for('main.register') }}">Cadastrar-se</a></li>
+        <li><a href="{{ url_for('main.login') }}">Entrar</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- TOASTS -->
+  <div id="toast-container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="toast {{ category }}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  </div>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main>
+    {% block content %}
+    {% endblock %}
+  </main>
+
+  <!-- SCRIPT PARA AUTO-HIDE DOS TOASTS -->
+  <script>
+    const toasts = document.querySelectorAll('.toast');
+    toasts.forEach(function(toast) {
+      setTimeout(() => {
+        toast.style.animation = 'toastOut 0.5s forwards';
+        setTimeout(() => toast.remove(), 500);
+      }, 3000); // 3 segundos visível
+    });
+  </script>
+
+</body>
+</html>
