@@ -1,13 +1,34 @@
-blinker==1.9.0
-click==8.1.8
-Flask==3.1.0
-Flask-Login==0.6.3
-Flask-SQLAlchemy==3.1.1
-Flask-Migrate
-itsdangerous==2.2.0
-Jinja2==3.1.6
-MarkupSafe==3.0.2
-SQLAlchemy==2.0.40
-Werkzeug==3.1.3
-email-validator
-python-dotenv
+# Core
+Flask>=2.2,<3.0
+Flask-Login>=0.6,<0.7
+Flask-Migrate>=4.0,<5.0
+Flask-Mail>=0.9,<1.0
+Flask-SQLAlchemy>=3.0,<4.0
+python-dotenv>=1.0,<2.0
+alembic>=1.8,<2.0
+
+# WSGI server
+gunicorn>=20.1,<21.0
+
+# Database adapters
+psycopg2-binary>=2.9,<3.0    # se usar Postgres no Render
+# sqlite vem por padrão no Python, mas deixe psycopg2-binary para produção
+
+# Static files (se quiser servir assets via WhiteNoise)
+whitenoise>=6.5,<7.0
+
+# Utilitários de data e segurança
+python-dateutil>=2.8,<3.0
+itsdangerous>=2.1,<3.0
+
+# Dependências do Werkzeug/Jinja2 (para compatibilidade)
+Werkzeug>=2.2,<3.0
+Jinja2>=3.1,<4.0
+MarkupSafe>=2.1,<3.0
+click>=8.1,<9.0
+
+# Imagens (caso precise manipular uploads)
+Pillow>=9.0,<10.0
+
+# (Opcional) CORS se sua API for consumida externamente
+Flask-Cors>=3.0,<4.0
