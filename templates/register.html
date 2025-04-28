@@ -5,7 +5,7 @@
 {% block content %}
 <section class="register-container">
   <h2>Crie sua Conta</h2>
-  <form action="{{ url_for('main.register') }}" method="POST" class="register-form">
+  <form action="{{ url_for('auth.register') }}" method="POST" class="register-form">
     <input type="text" id="username" name="username" placeholder="Seu nome completo" required>
     <input type="email" id="email" name="email" placeholder="Seu e-mail" required>
     <input type="password" id="password" name="password" placeholder="Crie uma senha" required>
@@ -13,12 +13,12 @@
     
     <div class="checkbox-container">
       <input type="checkbox" id="terms" required>
-      <label for="terms">Li e aceito os <a href="{{ url_for('main.termos_de_uso') }}">Termos de Uso</a> e a <a href="{{ url_for('main.sobre_nos') }}">Política de Privacidade</a>.</label>
+      <label for="terms">Li e aceito os <a href="{{ url_for('auth.termos_de_uso') }}">Termos de Uso</a> e a <a href="{{ url_for('auth.sobre_nos') }}">Política de Privacidade</a>.</label>
     </div>
     
-    <button type="submit" class="btn-register">Cadastrar</button>
+    <button type="submit" class="btn btn-primary">Cadastrar</button>
 
-    <p class="login-link">Já tem uma conta? <a href="{{ url_for('main.login') }}">Entrar</a></p>
+    <p class="login-link">Já tem uma conta? <a href="{{ url_for('auth.login') }}">Entrar</a></p>
     <p class="privacy-text">Seus dados estão protegidos conforme a LGPD.</p>
   </form>
 </section>

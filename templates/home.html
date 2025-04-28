@@ -8,8 +8,8 @@
     <h1>Diagnóstico Cardiológico Inteligente, Seguro e Para Todos</h1>
     <p>Transformando a saúde no Brasil — do grande centro ao interior mais distante.</p>
     <div class="hero-buttons">
-      <a href="{{ url_for('main.register') }}" class="btn-primary">Cadastrar-se</a>
-      <a href="{{ url_for('main.login') }}" class="btn-secondary">Entrar</a>
+      <a href="{{ url_for('auth.register') }}" class="btn-primary">Cadastrar-se</a>
+      <a href="{{ url_for('auth.login') }}" class="btn-secondary">Entrar</a>
     </div>
   </div>
 </header>
@@ -69,5 +69,4 @@
        promovendo equidade, inovação e vidas salvas.</p>
   </div>
 </section>
-
 {% endblock %}

@@ -1,8 +1,8 @@
-"""Initial schema
+"""Banco recriado após ajustes no modelo Patient
 
-Revision ID: c5e4eb151e4a
+Revision ID: bfd8c78e81ef
 Revises: 
-Create Date: 2025-04-26 19:37:00.845404
+Create Date: 2025-04-27 20:00:48.390935
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'c5e4eb151e4a'
+revision = 'bfd8c78e81ef'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -50,18 +50,24 @@ def upgrade():
     sa.Column('phone', sa.String(length=20), nullable=True),
     sa.Column('address', sa.String(length=300), nullable=True),
     sa.Column('socioeconomic', sa.String(length=20), nullable=True),
-    sa.Column('history_personal', sa.Text(), nullable=True),
-    sa.Column('history_family', sa.Text(), nullable=True),
-    sa.Column('hypertension', sa.Boolean(), nullable=True),
-    sa.Column('diabetes', sa.Boolean(), nullable=True),
-    sa.Column('dyslipidemia', sa.Boolean(), nullable=True),
-    sa.Column('obesity', sa.Boolean(), nullable=True),
-    sa.Column('smoking', sa.String(length=100), nullable=True),
+    sa.Column('history_personal', sa.JSON(), nullable=True),
+    sa.Column('history_personal_others', sa.String(length=300), nullable=True),
+    sa.Column('history_family', sa.JSON(), nullable=True),
+    sa.Column('history_family_others', sa.String(length=300), nullable=True),
+    sa.Column('comorbidities', sa.JSON(), nullable=True),
+    sa.Column('previous_events', sa.JSON(), nullable=True),
+    sa.Column('smoking_status', sa.String(length=50), nullable=True),
     sa.Column('alcohol', sa.String(length=20), nullable=True),
     sa.Column('exercise', sa.String(length=100), nullable=True),
-    sa.Column('sleep', sa.String(length=100), nullable=True),
+    sa.Column('sleep_duration', sa.String(length=50), nullable=True),
+    sa.Column('sleep_quality', sa.String(length=20), nullable=True),
     sa.Column('diet', sa.String(length=20), nullable=True),
     sa.Column('observations', sa.Text(), nullable=True),
+    sa.Column('weight', sa.Float(), nullable=True),
+    sa.Column('height', sa.Float(), nullable=True),
+    sa.Column('cardiac_symptoms', sa.JSON(), nullable=True),
+    sa.Column('cardiac_symptoms_others', sa.String(length=300), nullable=True),
+    sa.Column('risk_level', sa.String(length=50), nullable=True),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
@@ -81,7 +87,7 @@ def upgrade():
     sa.Column('diagnosis', sa.String(length=200), nullable=True),
     sa.Column('comorbidities', sa.String(length=200), nullable=True),
     sa.Column('prior_surgery', sa.String(length=200), nullable=True),
-    sa.Column('medications', sa.Text(), nullable=True),
+    sa.Column('medications', sa.JSON(), nullable=True),
     sa.Column('allergies', sa.Text(), nullable=True),
     sa.Column('stress_level', sa.Boolean(), nullable=True),
     sa.Column('regular_care', sa.Boolean(), nullable=True),

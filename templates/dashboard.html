@@ -8,8 +8,17 @@
     max-height: 70vh;
     overflow-y: auto;
   }
+  .bg-orange {
+    background-color: #fd7e14 !important;
+    color: white !important;
+  }
+  .text-orange {
+    color: #fd7e14 !important;
+  }
 </style>
-<div class="container py-4">
+<main class="container py-4" role="main">
+
+  <section aria-label="Resumo de Métricas" role="region">
 
   <!-- Cabeçalho -->
   <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4">
@@ -19,7 +28,7 @@
     </div>
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb mb-0">
-        <li class="breadcrumb-item"><a href="{{ url_for('main.home') }}">Início</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('auth.home') }}">Início</a></li>
         <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
       </ol>
     </nav>
@@ -63,6 +72,7 @@
       </div>
     </div>
   </div>
+  </section>
 
   <!-- Ações Rápidas -->
   <div class="d-flex gap-3 mb-4 flex-wrap">
@@ -93,19 +103,26 @@
         </div>
         <ul class="list-group list-group-flush" id="patientList" style="max-height: 300px; overflow-y: auto;">
           {% for p in patients %}
-          <li class="list-group-item d-flex justify-content-between align-items-center" data-bs-toggle="modal" data-bs-target="#modalEditPatient" data-patient-id="{{ p.id }}">
-            <div>
-              <strong>{{ p.name }}</strong><br>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div style="cursor: pointer;" onclick="window.location.href='{{ url_for('patients.edit_patient', patient_id=p.id) }}';">
+              <strong>{{ p.name }}</strong>
               <small class="text-muted">CPF: {{ p.cpf or '—' }}</small>
             </div>
-            <small class="text-muted">
-              {{ p.created_at.strftime('%d/%m/%Y') if p.created_at else '—' }}
-            </small>
-            <form method="POST" action="{{ url_for('main.delete_patient', patient_id=p.id) }}" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja excluir este paciente?');">
-              <button type="submit" class="btn btn-link text-danger p-0 ms-3" title="Excluir paciente">
-                <i class="bi bi-trash-fill"></i>
+            <div class="d-flex align-items-center">
+              <small class="text-muted">
+                {{ p.created_at.strftime('%d/%m/%Y') if p.created_at else '—' }}
+              </small>
+              <!-- Botão Relatório -->
+              <button type="button" class="btn btn-link text-primary p-0 ms-3" title="Relatório do paciente" onclick="openPatientReport({{ p.id }}); event.stopPropagation();">
+                <i class="bi bi-file-text"></i>
               </button>
-            </form>
+              <!-- Botão Excluir -->
+              <form method="POST" action="{{ url_for('patients.delete_patient', patient_id=p.id) }}" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja excluir este paciente?');">
+                <button type="submit" class="btn btn-link text-danger p-0 ms-3" title="Excluir paciente" onclick="event.stopPropagation();">
+                  <i class="bi bi-trash-fill"></i>
+                </button>
+              </form>
+            </div>
           </li>
           {% else %}
           <li class="list-group-item text-center text-muted">Nenhum paciente encontrado.</li>
@@ -138,13 +155,13 @@
     </div>
   </div>
 
-</div>
+</main>
 
 <!-- Modal Cadastrar Paciente -->
 <div class="modal fade" id="modalPaciente" tabindex="-1" aria-labelledby="modalPacienteLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
-      <form method="POST" action="{{ url_for('main.cadastro_paciente') }}">
+      <form method="POST" action="{{ url_for('patients.create_patient') }}">
         <div class="modal-header">
           <h5 class="modal-title" id="modalPacienteLabel">Cadastrar Novo Paciente</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
@@ -184,7 +201,7 @@
 <div class="modal fade" id="modalECG" tabindex="-1" aria-labelledby="modalECGLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
-      <form method="POST" action="{{ url_for('main.dashboard') }}" enctype="multipart/form-data">
+      <form method="POST" action="{{ url_for('patients.dashboard') }}" enctype="multipart/form-data">
         <div class="modal-header">
           <h5 class="modal-title" id="modalECGLabel">Enviar Imagem de ECG</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
@@ -340,6 +357,10 @@
               <label class="form-label">Observações adicionais</label>
               <textarea name="observations" id="editObservations" class="form-control" rows="2"></textarea>
             </div>
+            <div class="col-md-6">
+              <label class="form-label">Medicamentos</label>
+              <input type="text" name="medications" id="editMedications" class="form-control" placeholder="Medicamentos (separados por vírgula)">
+            </div>
           </div>
         </div>
         <div class="modal-footer">
@@ -350,16 +371,57 @@
     </div>
   </div>
 </div>
-<!-- End Modal Editar Paciente -->
+
+<!-- Modal Relatório do Paciente -->
+<div class="modal fade" id="modalPatientReport" tabindex="-1" aria-labelledby="modalPatientReportLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalPatientReportLabel">Relatório do Paciente</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Nome:</strong> <span id="reportName"></span></p>
+        <p><strong>Data de nascimento:</strong> <span id="reportBirthDate"></span></p>
+        <p><strong>CPF:</strong> <span id="reportCpf"></span></p>
+        <p><strong>Risco cardiovascular:</strong> 
+          <span id="reportRiskLevel" class="badge" style="cursor:pointer;" onclick="showRiskDetails();"></span>
+        </p>
+        <div id="riskDetails" class="mt-2 text-muted small" style="display:none;">
+          <strong>Detalhes:</strong> 
+          <span id="riskScoreDetails"></span><br>
+          <em>Classificação segundo diretrizes SBC/ESC.</em>
+        </div>
+        <p><strong>Comorbidades:</strong> <span id="reportComorbidities"></span></p>
+        <p><strong>Medicamentos:</strong> <span id="reportMedications"></span></p>
+        <p><strong>Observações:</strong> <span id="reportObservations"></span></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        <button type="button" class="btn btn-primary" onclick="exportReportAsPDF();">Exportar PDF</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Modal Relatório do Paciente -->
 
 {% endblock %}
 
 {% block scripts %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   {{ super() }}
   <script>
-    // Dados dos pacientes para uso no modal de edição
+    // Dados dos pacientes para uso no modal de edição e relatório
+    // Certifique-se que cada objeto tem comorbidities, medications e observations
     var patientsData = {{ patients_data|tojson }};
-    
+    if (Array.isArray(patientsData)) {
+      patientsData.forEach(function(p) {
+        if (typeof p.comorbidities === 'undefined') p.comorbidities = '';
+        if (typeof p.medications === 'undefined') p.medications = '';
+        if (typeof p.observations === 'undefined') p.observations = '';
+      });
+    }
+
     // Filtrar listas
     document.getElementById('searchPatient').addEventListener('input', e => {
       const term = e.target.value.toLowerCase();
@@ -419,11 +481,116 @@
       document.getElementById('editDiet').value = patient.diet || '';
       document.getElementById('editSocioeconomic').value = patient.socioeconomic || '';
       document.getElementById('editObservations').value = patient.observations || '';
+      document.getElementById('editMedications').value = patient.medications || '';
       // Atualiza a rota de submissão do formulário para incluir o patient_id
       var form = editModal.querySelector('form');
-      form.action = '/edit-patient/' + id;
+      form.action = '/patients/edit-patient/' + id;
     });
 
+    // Função para abrir o modal de relatório do paciente
+    function openPatientReport(id) {
+      var patient = patientsData.find(p => p.id == id);
+      if (!patient) return;
+      document.getElementById('reportName').textContent = patient.name || '-';
+      document.getElementById('reportBirthDate').textContent = patient.birth_date || '-';
+      document.getElementById('reportCpf').textContent = patient.cpf || '-';
+      // Novo trecho para configurar o badge de risco com ícone
+      var riskBadge = document.getElementById('reportRiskLevel');
+      if (patient.risk_level == 'Baixo risco') {
+        riskBadge.innerHTML = '<i class="bi bi-heart text-white me-1"></i> Baixo risco';
+        riskBadge.className = 'badge bg-success';
+      } else if (patient.risk_level == 'Risco moderado') {
+        riskBadge.innerHTML = '<i class="bi bi-exclamation-triangle-fill text-dark me-1"></i> Risco moderado';
+        riskBadge.className = 'badge bg-warning text-dark';
+      } else if (patient.risk_level == 'Alto risco') {
+        riskBadge.innerHTML = '<i class="bi bi-exclamation-circle-fill text-white me-1"></i> Alto risco';
+        riskBadge.className = 'badge bg-orange';
+      } else if (patient.risk_level == 'Muito alto risco') {
+        riskBadge.innerHTML = '<i class="bi bi-x-circle-fill text-white me-1"></i> Muito alto risco';
+        riskBadge.className = 'badge bg-danger';
+      } else {
+        riskBadge.innerHTML = '<i class="bi bi-question-circle-fill text-white me-1"></i> Não calculado';
+        riskBadge.className = 'badge bg-secondary';
+      }
+      // Preencher detalhes do risco (com cor na pontuação)
+      if (typeof patient.risk_pontuacao !== 'undefined') {
+        const score = patient.risk_pontuacao;
+        let colorClass = '';
+        if (score <= 2) {
+          colorClass = 'text-success'; // Verde
+        } else if (score <= 5) {
+          colorClass = 'text-warning'; // Amarelo
+        } else if (score <= 8) {
+          colorClass = 'text-orange'; // Laranja (personalizado)
+        } else {
+          colorClass = 'text-danger'; // Vermelho
+        }
+        document.getElementById('riskScoreDetails').innerHTML =
+          `<span class="${colorClass}">Pontuação de risco: ${score} pontos.</span>`;
+      } else {
+        document.getElementById('riskScoreDetails').innerHTML = '<span class="text-muted">Pontuação indisponível.</span>';
+      }
+      // Esconder detalhes ao abrir o modal
+      document.getElementById('riskDetails').style.display = 'none';
+      document.getElementById('reportComorbidities').textContent = patient.comorbidities || '-';
+      document.getElementById('reportMedications').textContent = patient.medications || '-';
+      document.getElementById('reportObservations').textContent = patient.observations || '-';
+      var modal = new bootstrap.Modal(document.getElementById('modalPatientReport'));
+      modal.show();
+    }
+    // Função para mostrar/ocultar detalhes do risco
+    function showRiskDetails() {
+      const details = document.getElementById('riskDetails');
+      if (details.style.display === 'none') {
+        details.style.display = 'block';
+      } else {
+        details.style.display = 'none';
+      }
+    }
+  </script>
+  <script>
+    function exportReportAsPDF() {
+      var patientName = document.getElementById('reportName').textContent.trim() || 'Paciente';
+      var birthDate = document.getElementById('reportBirthDate').textContent.trim() || '-';
+      var cpf = document.getElementById('reportCpf').textContent.trim() || '-';
+      var riskLevel = document.getElementById('reportRiskLevel').textContent.trim() || '-';
+      var comorbidities = document.getElementById('reportComorbidities').textContent.trim() || '-';
+      var medications = document.getElementById('reportMedications').textContent.trim() || '-';
+      var observations = document.getElementById('reportObservations').textContent.trim() || '-';
+      var riskDetails = document.getElementById('riskScoreDetails').textContent.trim() || '';
+
+      var content = `
+        <div style="font-family: Arial, sans-serif; padding: 20px;">
+          <h2 style="text-align:center; color:#0d6efd;">ECG IA Primário</h2>
+          <h4 style="text-align:center;">Relatório Clínico do Paciente</h4>
+          <hr style="margin:20px 0;">
+          <p><strong>Nome:</strong> ${patientName}</p>
+          <p><strong>Data de nascimento:</strong> ${birthDate}</p>
+          <p><strong>CPF:</strong> ${cpf}</p>
+          <p><strong>Risco cardiovascular:</strong> ${riskLevel}</p>
+          <p><strong>Detalhes do risco:</strong> ${riskDetails}</p>
+          <p><strong>Comorbidades:</strong> ${comorbidities}</p>
+          <p><strong>Medicamentos:</strong> ${medications}</p>
+          <p><strong>Observações:</strong> ${observations}</p>
+          <br>
+          <p style="font-size:12px; text-align:center;"><em>Classificação de risco baseada nas diretrizes da SBC/ESC.</em></p>
+          <p style="font-size:10px; text-align:center;">Relatório gerado automaticamente pelo sistema ECG IA Primário em ${new Date().toLocaleDateString()}.</p>
+        </div>
+      `;
+
+      var opt = {
+        margin:       0.5,
+        filename:     'relatorio_' + patientName.replace(/\s+/g, '_').toLowerCase() + '.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS: true },
+        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+      };
+
+      var temp = document.createElement('div');
+      temp.innerHTML = content;
+
+      html2pdf().set(opt).from(temp).save();
+    }
   </script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>

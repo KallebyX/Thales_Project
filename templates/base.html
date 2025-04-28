@@ -20,7 +20,7 @@
   <!-- NAVBAR -->
   <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-3">
     <div class="container">
-      <a class="navbar-brand fw-bold text-primary" href="{{ url_for('main.home') }}">
+      <a class="navbar-brand fw-bold text-primary" href="{{ url_for('auth.home') }}">
         ECG IA Primário
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
@@ -30,8 +30,8 @@
 
       <div class="collapse navbar-collapse" id="mainNavbar">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item"><a class="nav-link" href="{{ url_for('main.home') }}">Início</a></li>
-          <li class="nav-item"><a class="nav-link" href="{{ url_for('main.sobre_nos') }}">Sobre Nós</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.home') }}">Início</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.sobre_nos') }}">Sobre Nós</a></li>
         </ul>
 
         <div class="d-flex align-items-center">
@@ -41,8 +41,8 @@
           </button>
 
           {% if not current_user.is_authenticated %}
-            <a href="{{ url_for('main.login') }}" class="btn btn-outline-primary me-2">Entrar</a>
-            <a href="{{ url_for('main.register') }}" class="btn btn-primary">Cadastrar-se</a>
+            <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary me-2">Entrar</a>
+            <a href="{{ url_for('auth.register') }}" class="btn btn-primary">Cadastrar-se</a>
           {% else %}
             <div class="dropdown">
               <button class="btn btn-primary dropdown-toggle" type="button" id="userMenu"
@@ -50,9 +50,9 @@
                 Olá, {{ current_user.username }}
               </button>
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
-                <li><a class="dropdown-item" href="{{ url_for('main.dashboard') }}">Dashboard</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('patients.dashboard') }}">Dashboard</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item text-danger" href="{{ url_for('main.logout') }}">Sair</a></li>
+                <li><a class="dropdown-item text-danger" href="{{ url_for('auth.logout') }}">Sair</a></li>
               </ul>
             </div>
           {% endif %}
@@ -94,10 +94,7 @@
           <h5>Institucional</h5>
           <ul class="list-unstyled">
             <li><a href="#" id="open-terms" class="text-decoration-none">Termos de Uso</a></li>
-            <li><a href="{{ url_for('main.faq') }}" class="text-decoration-none">Ajuda / FAQ</a></li>
-            {% if current_user.is_authenticated and current_user.is_admin %}
-              <li><a href="{{ url_for('main.admin_dashboard') }}" class="text-decoration-none">Administração</a></li>
-            {% endif %}
+            <li><a href="{{ url_for('auth.faq') }}" class="text-decoration-none">Ajuda / FAQ</a></li>
           </ul>
         </div>
         <div class="col">
@@ -112,6 +109,9 @@
         <!-- Espaço para futuras colunas -->
         <div class="col"></div>
         <div class="col text-center text-md-end">
+          {% if current_user.is_authenticated and current_user.is_admin %}
+            <a href="{{ url_for('auth.admin_dashboard') }}" class="btn btn-sm btn-outline-secondary mb-2">Administração</a>
+          {% endif %}
           <small class="text-muted">© 2025 ECG IA Primário — Feito no Brasil.</small>
         </div>
       </div>
