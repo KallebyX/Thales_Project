@@ -1,0 +1,15 @@
+version: '3.9'
+
+services:
+  web:
+    build: .
+    container_name: thales_web
+    command: flask run --host=0.0.0.0 --port=5000
+    ports:
+      - "5007:5000"
+    environment:
+      - FLASK_ENV=development
+      - FLASK_APP=app.py
+    volumes:
+      - .:/app
+      - ./instance:/app/instance

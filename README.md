@@ -55,10 +55,11 @@ Uma aplicação web completa para gerenciamento de dados de pacientes, consultas
    ALLOWED_EXTENSIONS=png,jpg,jpeg
    ```
 
-4. Inicialize o banco de dados e aplique migrações:
+4. Inicialize o banco de dados:
    ```bash
-   flask db init      # só na primeira instalação
-   flask db migrate -m "Cria esquema inicial"
+   # Apenas na primeira execução:
+   flask db init
+   flask db migrate -m "Criação inicial das tabelas"
    flask db upgrade
    ```
 
@@ -113,3 +114,39 @@ Thales_Project/
 
 Este projeto está sob a Licença MIT. Veja `LICENSE` para detalhes.
 
+## Uso com Docker
+
+Este projeto pode ser executado facilmente com Docker e Docker Compose.
+
+### Pré-requisitos
+
+- Docker
+- Docker Compose
+
+### Instruções
+
+1. Construa e inicie os containers:
+
+   ```bash
+   docker-compose up --build
+   ```
+
+2. Acesse a aplicação:
+
+   ```
+   http://localhost:5007
+   ```
+
+3. (Opcional) Caso esteja usando Flask-Migrate, você pode aplicar as migrações manualmente dentro do container:
+
+   ```bash
+   docker exec -it thales_web flask db upgrade
+   ```
+
+4. Para reiniciar o ambiente:
+
+   ```bash
+   docker-compose down --volumes --remove-orphans
+   ```
+
+---

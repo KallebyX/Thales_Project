@@ -52,3 +52,56 @@ def build_patients_data(patients):
             'observations': obs,
         })
     return out
+
+
+if __name__ == "__main__":
+    from datetime import datetime
+
+    class FakeConsultation:
+        def __init__(self):
+            self.medications = "aspirina, dipirona"
+            self.created_at = datetime.now()
+
+if __name__ == "__main__":
+    from datetime import datetime
+    # código de teste ou print para rodar build_patients_data()
+
+    class FakeConsultation:
+        def __init__(self):
+            self.medications = "aspirina, dipirona"
+            self.created_at = datetime.now()
+
+    class FakePatient:
+        def __init__(self):
+            self.id = 1
+            self.name = "Paciente Teste"
+            self.cpf = "12345678900"
+            self.birth_date = datetime(1990, 5, 10).date()
+            self.risk_level = "moderado"
+            self.risk_score = 5
+            self.comorbidities = ["hipertensão", "diabetes"]
+            self.medications = ["enalapril", "metformina"]
+            self.observations = "Paciente em acompanhamento"
+            self.consultations = [FakeConsultation()]
+            self.created_at = datetime.now()
+            self.updated_at = datetime.now()
+
+            # Campos exigidos pela função de risco
+            self.previous_events = ["infarto"]
+            self.cardiac_symptoms = ["dor no peito"]
+            self.sleep_duration = 6
+            self.sleep_quality = "boa"
+            self.diet = "equilibrada"
+            self.smoking_status = "não"
+            self.alcohol = "socialmente"
+            self.exercise = "moderado"
+            self.gender = "F"
+            self.weight = 70
+            self.height = 1.70
+            self.age = 33
+
+    pacientes = [FakePatient()]
+    resultado = build_patients_data(pacientes)
+
+    from pprint import pprint
+    pprint(resultado)

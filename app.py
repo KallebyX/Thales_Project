@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, redirect, url_for
 from config import Config
 from extensions import db, login_manager, migrate, mail
 
@@ -10,22 +10,24 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
     login_manager.init_app(app)
+    # Redirect unauthorized users to the login page
+    login_manager.login_view = 'auth.login'
+    login_manager.login_message = 'Você precisa estar logado para acessar esta página.'
     mail.init_app(app)
 
-    # Registrar blueprints
-    from auth.routes     import bp as auth_bp
-    from patients.routes import bp as patients_bp
-    from ecg.routes      import bp as ecg_bp
-    from api.routes      import api as api_bp
+    # Rota raiz redireciona para a home do módulo de autenticação
+    @app.route('/')
+    def index():
+        return redirect(url_for('auth.home'))
 
-    app.register_blueprint(auth_bp,    url_prefix='')
-    app.register_blueprint(patients_bp, url_prefix='/patients')
-    app.register_blueprint(ecg_bp,      url_prefix='/ecg')
-    app.register_blueprint(api_bp,      url_prefix='/api')
+    from routes import register_blueprints
+    register_blueprints(app)
 
     return app
 
 # Rodar a aplicação localmente
 if __name__ == "__main__":
     app = create_app()
+    with app.app_context():
+        db.create_all()
     app.run(host="0.0.0.0", port=5001, debug=True)
