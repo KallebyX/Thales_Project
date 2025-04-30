@@ -36,3 +36,22 @@ docker-test:
 # Entra no bash do container
 bash:
 	docker run -it --rm $(APP_NAME) /bin/bash
+
+# Executa o seed do banco
+seed:
+	python seed.py
+
+# Gera uma nova migration
+migrate:
+	flask db migrate -m "migration automática"
+
+# Aplica a migration ao banco
+upgrade:
+	flask db upgrade
+
+# Apaga o banco e recria do zero
+reset-db:
+	rm -f instance/*.db
+	flask db downgrade base
+	flask db upgrade
+	python seed.py

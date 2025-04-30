@@ -134,7 +134,7 @@ class UploadedECG(db.Model):
 
     id          = db.Column(db.Integer, primary_key=True)
     filename    = db.Column(db.String(255), nullable=False)
-    upload_time = db.Column(db.DateTime, server_default=db.func.now())
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
     user_id     = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     patient_id  = db.Column(db.Integer, db.ForeignKey('patient.id'), nullable=False)  # Certifique-se de que esta linha está presente!
 
@@ -142,7 +142,7 @@ class UploadedECG(db.Model):
     patient     = db.relationship('Patient', back_populates='ecgs', lazy='selectin')
 
     def __repr__(self):
-        return f"<UploadedECG {self.filename} for Patient {self.patient_id}>"
+        return f"<UploadedECG {self.filename} at {self.created_at} for Patient {self.patient_id}>"
 
 
 # ============================ #

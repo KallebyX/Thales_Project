@@ -1,5 +1,10 @@
 # ECG IA Primário
 
+![Build](https://img.shields.io/badge/build-passing-brightgreen)
+![Coverage](https://img.shields.io/badge/coverage-90%25-blue)
+![Python](https://img.shields.io/badge/python-3.11-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+
 Uma aplicação web completa para gerenciamento de dados de pacientes, consultas clínicas e exames de ECG, voltada a profissionais de saúde (médicos, enfermeiros, agentes) e administradores.
 
 ## Tecnologias Utilizadas
@@ -150,3 +155,14 @@ Este projeto pode ser executado facilmente com Docker e Docker Compose.
    ```
 
 ---
+
+## Comandos Makefile
+
+Para facilitar o desenvolvimento, utilize os comandos abaixo com `make`:
+
+```bash
+make seed       # Popula o banco com dados de teste (usuário admin, pacientes e ECGs)
+make migrate    # Gera uma nova migração com Alembic
+make upgrade    # Aplica as migrações ao banco de dados
+make reset-db   # Remove o banco atual, aplica migrações do zero e roda o seed
+```

@@ -1,49 +1,41 @@
-# Core
-Flask>=2.2,<3.0
-Flask-Login>=0.6,<0.7
-Flask-Migrate>=4.0,<5.0
-Flask-Mail>=0.9,<1.0
-Flask-SQLAlchemy>=3.0,<4.0
-python-dotenv>=1.0,<2.0
-alembic>=1.8,<2.0
-
-# WSGI server
-gunicorn>=20.1,<21.0
-
-# Database adapters
-psycopg2-binary>=2.9,<3.0    # se usar Postgres no Render
-# sqlite vem por padrão no Python, mas deixe psycopg2-binary para produção
-
-# Static files (se quiser servir assets via WhiteNoise)
-whitenoise>=6.5,<7.0
-
-# Utilitários de data e segurança
-python-dateutil>=2.8,<3.0
-itsdangerous>=2.1,<3.0
-
-# Dependências do Werkzeug/Jinja2 (para compatibilidade)
-Werkzeug>=2.2,<3.0
-Jinja2>=3.1,<4.0
-MarkupSafe>=2.1,<3.0
-click>=8.1,<9.0
-
-# Imagens (caso precise manipular uploads)
-Pillow<10.0,>=9.0 --only-binary :all:
-
-# (Opcional) CORS se sua API for consumida externamente
-Flask-Cors>=3.0,<4.0
-
-# Form handling and validation
-Flask-WTF>=1.0,<2.0
-WTForms>=3.0,<4.0
-
-# Rate limiting
-Flask-Limiter>=2.0,<3.0
-
-# Asynchronous task queue
-celery>=5.0,<6.0
-redis>=4.0,<5.0
-
-pytest-sugar>=0.9,<1.0
-pytest-cov>=4.0,<5.0
-pytest-randomly>=3.0,<4.0
+alembic==1.15.2
+blinker==1.9.0
+click==8.1.8
+coverage==7.8.0
+Faker==37.1.0
+Flask==3.1.0
+Flask-Login==0.6.3
+Flask-Mail==0.10.0
+Flask-Migrate==4.1.0
+Flask-SQLAlchemy==3.1.1
+gunicorn==23.0.0
+iniconfig==2.1.0
+itsdangerous==2.2.0
+Jinja2==3.1.6
+Mako==1.3.10
+markdown-it-py==3.0.0
+MarkupSafe==3.0.2
+mdurl==0.1.2
+packaging==25.0
+pillow==11.2.1
+pluggy==1.5.0
+pprintpp==0.4.0
+psycopg2-binary==2.9.10
+Pygments==2.19.1
+pytest==8.3.5
+pytest-clarity==1.0.1
+pytest-cov==6.1.1
+pytest-randomly==3.16.0
+pytest-sugar==1.0.0
+python-dateutil==2.9.0.post0
+python-dotenv==1.1.0
+rich==14.0.0
+setuptools==80.0.1
+six==1.17.0
+SQLAlchemy==2.0.40
+termcolor==3.1.0
+typing_extensions==4.13.2
+tzdata==2025.2
+Werkzeug==3.1.3
+wheel==0.45.1
+whitenoise==6.9.0
